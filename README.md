@@ -59,7 +59,23 @@ Investigated on 2026-09-29 with `curl` (a real-browser test was not possible: th
 
 The app does not fake success: if the fetch fails you see an error, and demo data is only shown on explicit request, labeled.
 
-### Recommended next step (no proxy hack)
+### Relay Worker (implemented)
+
+Because direct browser access is blocked, `worker/` contains a small Cloudflare Worker that downloads the workbook server-side (following redirects and keeping the `FedAuth` cookie) and returns it with CORS headers. The site fetches from the Worker instead of OneDrive. Verified locally with `wrangler dev`: returns a valid XLSX with `Access-Control-Allow-Origin`. The OneDrive URL is fixed in `worker/wrangler.toml` (not accepted from the request, so it is not an open proxy).
+
+Local:
+```bash
+npm run worker:dev   # terminal 1 → http://localhost:8787
+npm run dev          # terminal 2 → http://localhost:3000
+```
+Deploy:
+```bash
+npx wrangler login
+npm run worker:deploy            # prints https://poc-hazel-excel-relay.<sub>.workers.dev
+```
+Then set `NEXT_PUBLIC_EXCEL_URL` to that URL in Cloudflare Pages → Settings → Environment variables, redeploy the site once, and set `ALLOWED_ORIGIN` in `worker/wrangler.toml` to your Pages URL. This relies on undocumented OneDrive redirect behavior and the file is still publicly readable, so the security warning still applies.
+
+### Alternatives considered
 
 Authenticated access via Microsoft Graph is the supported route (below). If you only need a public, CORS-enabled file for the POC, host the exported file somewhere that sends CORS headers (e.g. SharePoint anonymous links from a work/school tenant are also not CORS-enabled; an Azure Blob/Cloudflare R2 public object with a CORS rule is), at the cost of an upload step, which defeats the "just edit in OneDrive" goal. A backend/Worker proxy would work technically but was deliberately not added.
 

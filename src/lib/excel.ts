@@ -32,6 +32,7 @@ export interface LoadResult {
 
 /** Downloads the workbook bytes in the browser. Cache-busts and disables HTTP caching. */
 export async function fetchWorkbook(url: string = EXCEL_URL) {
+  if (!url) throw new ExcelError("NETWORK_OR_CORS", "No Excel URL configured. Set NEXT_PUBLIC_EXCEL_URL to the relay Worker URL.");
   const sep = url.includes("?") ? "&" : "?";
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
