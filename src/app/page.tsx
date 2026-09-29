@@ -11,6 +11,8 @@ import { DEMO_ROWS, ExcelError, loadPeople } from "@/lib/excel";
 import type { Person } from "@/types/person";
 
 const timeFmt = (d: Date) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+const durationFmt = (milliseconds: number) =>
+  milliseconds < 1_000 ? `${Math.round(milliseconds)} ms` : `${(milliseconds / 1_000).toFixed(2)} s`;
 
 export default function Page() {
   const [rows, setRows] = useState<Person[]>([]);
@@ -18,13 +20,16 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [demo, setDemo] = useState(false);
   const [updated, setUpdated] = useState<string | null>(null);
+  const [fetchDuration, setFetchDuration] = useState<number | null>(null);
   const [success, setSuccess] = useState(false);
   const [debug, setDebug] = useState<DebugInfo>({
     requestStatus: "idle", workbookLoaded: false, rows: 0, url: EXCEL_URL,
   });
 
   const load = useCallback(async () => {
+    const startedAt = performance.now();
     setLoading(true);
+    setFetchDuration(null);
     setError(null);
     setSuccess(false);
     setDemo(false);
@@ -48,6 +53,7 @@ export default function Page() {
         fetchTime: new Date().toISOString(), errorCode: err.code, url: EXCEL_URL,
       });
     } finally {
+      setFetchDuration(performance.now() - startedAt);
       setLoading(false);
     }
   }, []);
@@ -66,6 +72,9 @@ export default function Page() {
         <div className="flex flex-col items-start gap-1 sm:items-end">
           <RefreshButton onClick={load} loading={loading} />
           <p className="text-xs text-slate-500">Last updated: {updated ?? "—"}</p>
+          <p className="text-xs text-slate-500" aria-live="polite">
+            Fetch duration: {loading ? "Measuring…" : fetchDuration === null ? "—" : durationFmt(fetchDuration)}
+          </p>
         </div>
       </header>
 
