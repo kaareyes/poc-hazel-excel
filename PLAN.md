@@ -132,6 +132,15 @@ Note: the multi-tenant foundation (organization_id + RLS) is still built in from
 
 ---
 
+
+### 3.2 Admin sign-in (decided)
+- Single admin account: username **`hazel`**. The initial password is a bootstrap value supplied through the environment (`ADMIN_INITIAL_PASSWORD`, seeded once; **never hard-coded in source**), and the account is created with `must_change_password = true`.
+- **Forced change on first sign-in:** after a successful login the API returns a restricted session that can only call "change password"; nothing else in Admin works until it is changed. The new password must differ from the initial one and meet the policy (min 10 chars, not equal to the username, not on a common-password list).
+- Storage: `admin_users(id, username unique, password_hash argon2id, must_change_password, failed_attempts, locked_until, password_changed_at, created_at)`. Passwords are only ever stored as argon2id hashes.
+- Protection: login rate-limit + lockout after repeated failures (e.g. 5 tries → 15 min), generic error messages, HttpOnly + Secure + SameSite cookie session with idle/absolute timeouts, CSRF protection, audit log entries for login, failed login, password change.
+- Deployment note: the bootstrap password is weak by design, so **sign in and change it immediately after the first deploy** (the admin page is the only exposed surface until then). Serving the API on a subdomain of the same registrable domain as the website (e.g. `api.<domain>`) keeps the cookie first-party.
+- Scope: this same account is the only admin; it guards AI settings and dashboard configuration. Multi-user/roles remain a later phase.
+
 ## 4. Phased implementation plan
 
 > **Revised order after the static preview (hosting: Node.js API on AWS, Postgres on RDS, frontend on Cloudflare — see ARCHITECTURE §0):**
