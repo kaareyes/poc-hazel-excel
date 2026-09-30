@@ -6,6 +6,14 @@ Companion docs: [ARCHITECTURE.md](ARCHITECTURE.md) · [DATA_SCHEMA.md](DATA_SCHE
 Positioning: *"Turn your existing AR reports into actionable collections intelligence."*
 Not "AI Excel dashboard". Primary CTA **Analyze My AR Report**, secondary **View Demo**.
 
+> ## SCOPE REVISION — single company first (decided)
+> We are building **one application for one company**. SaaS/multi-tenancy is postponed until this works for that company.
+> - **Dropped for now:** organizations, multiple users/roles, sign-up, tenant `organization_id` columns, Postgres row-level security, per-org settings, billing, cross-tenant leak tests.
+> - **Kept:** a single **admin password** for the Admin page (it holds the AI key and settings), audit log, private S3 storage, import profiles, validation, snapshots/history, configurable settings (ageing buckets, risk rule, payment terms, ledger values) stored as one global config.
+> - **Kept so SaaS is cheap later:** all database access goes through one repository layer, UUID primary keys, config in tables (not code). Adding `organization_id` + RLS later is a planned migration, not a rewrite.
+> - **Company-specific defaults are allowed** (e.g. pre-loaded column mapping and payment-term codes for their report format), which also means AI mapping becomes optional/later.
+> Where ARCHITECTURE.md §4 and DATA_SCHEMA.md describe tenancy, treat it as the *future* SaaS design.
+
 ---
 
 ## 1. Phase 0 — Audit of what exists

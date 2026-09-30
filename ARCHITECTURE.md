@@ -6,6 +6,8 @@ Status: proposal for review. Items marked **[DECISION]** need product-owner/tech
 
 ---
 
+> **Single-company mode:** see PLAN.md scope revision — §4 (multi-tenancy/RLS) is deferred; use one global config and one admin password for now.
+
 ## 0. Revision — hosting & runtime (decided; supersedes §1–3 and §6 where they conflict)
 
 | Concern | Decision |
