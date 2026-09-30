@@ -16,7 +16,7 @@ Status: proposal for review. Items marked **[DECISION]** need product-owner/tech
 | Files | **S3** private bucket (SSE-KMS, block public access, versioning), presigned PUT/GET ≤ 5 min. |
 | Jobs | **SQS** (+ DLQ) replaces pg-boss. |
 | Secrets | **AWS Secrets Manager / KMS** — the AI API key is stored encrypted and only the API/worker task role can read it. |
-| Region | **ap-southeast-2 (Sydney)** proposed (AUD/AU customers). To be confirmed (Q1). |
+| Region | **ap-southeast-1 (Singapore)** — decided (team is in Manila; lowest latency). Data-residency needs of end customers (e.g. AU-only) remain open (Q1). |
 | IaC / CI | **AWS CDK (TypeScript)**; GitHub Actions builds image → ECR → ECS deploy; migrations run as a pre-deploy task. |
 | Auth (MVP-1) | No login. API is called by the Cloudflare-hosted site over CORS (allow-list of the site origin); Admin endpoints require `ADMIN_PASSWORD`-derived session. Real auth in the later phase. |
 | Repo layout | Monorepo: `apps/web` (current Next app), `apps/api`, `packages/core` (the pure logic now in `src/lib`: dates, money, mapping, normalize, calc — shared by web and api), `infra/` (CDK). |
