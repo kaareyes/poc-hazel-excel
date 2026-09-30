@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { todayIso } from "@/lib/dates";
-import { FIELDS, FIELDS_FOR, REQUIRED, suggestMapping, type ColumnSuggestion, type FieldId, type SheetKind } from "@/lib/mapping";
-import { detectTerms, normalizeImport, type SheetConfig } from "@/lib/normalize";
-import type { Dataset } from "@/lib/types";
+import { todayIso } from "@/lib/core";
+import { FIELDS, FIELDS_FOR, REQUIRED, suggestMapping, type ColumnSuggestion, type FieldId, type SheetKind } from "@/lib/core";
+import { detectTerms, normalizeImport, type SheetConfig } from "@/lib/core";
+import type { Dataset } from "@/lib/core";
 import { readWorkbook, type InspectedSheet } from "@/lib/workbook";
 
 interface SheetState {

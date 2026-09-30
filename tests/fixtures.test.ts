@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
+import { fileURLToPath } from "node:url";
 import readXlsx from "read-excel-file/node";
-import { computeMetrics, DEFAULT_BUCKETS, DEFAULT_RISK } from "../src/lib/calc";
-import { suggestMapping, type FieldId } from "../src/lib/mapping";
-import { normalizeImport, type SheetConfig } from "../src/lib/normalize";
-import { inspectSheet } from "../src/lib/workbook";
+import { computeMetrics, DEFAULT_BUCKETS, DEFAULT_RISK } from "../src/lib/core/calc";
+import { suggestMapping, type FieldId } from "../src/lib/core/mapping";
+import { normalizeImport, type SheetConfig } from "../src/lib/core/normalize";
+import { inspectSheet } from "../src/lib/core/inspect";
 
 async function load(file: string) {
-  const sheets = (await readXlsx(`fixtures/formats/${file}`)) as { sheet: string; data: unknown[][] }[];
+  const sheets = (await readXlsx(fileURLToPath(new URL(`../fixtures/formats/${file}`, import.meta.url)))) as { sheet: string; data: unknown[][] }[];
   const configs: SheetConfig[] = [];
   for (const s of sheets) {
     const ins = inspectSheet(s.sheet, s.data)!;

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { computeMetrics, DEFAULT_BUCKETS, DEFAULT_RISK } from "../src/lib/calc";
-import { parseDate } from "../src/lib/dates";
-import { parseMoneyCents } from "../src/lib/money";
-import { suggestMapping, type FieldId } from "../src/lib/mapping";
-import { detectTerms, normalizeImport, type SheetConfig } from "../src/lib/normalize";
-import { inspectSheet } from "../src/lib/workbook";
+import { computeMetrics, DEFAULT_BUCKETS, DEFAULT_RISK } from "../src/lib/core/calc";
+import { parseDate } from "../src/lib/core/dates";
+import { parseMoneyCents } from "../src/lib/core/money";
+import { suggestMapping, type FieldId } from "../src/lib/core/mapping";
+import { detectTerms, normalizeImport, type SheetConfig } from "../src/lib/core/normalize";
+import { inspectSheet } from "../src/lib/core/inspect";
 
 // Same underlying business data expressed in three very different company formats.
 const D = (y: number, m: number, d: number) => new Date(Date.UTC(y, m - 1, d));

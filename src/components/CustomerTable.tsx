@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { fmtMoney, fmtPct } from "@/lib/format";
-import type { CustomerRow } from "@/lib/types";
+import type { CustomerRow } from "@/lib/core";
 
 type SortKey = "name" | "balance" | "overdue" | "pct" | "last" | "oldest" | "days";
 const QUICK = [

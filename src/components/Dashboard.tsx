@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DEFAULT_BUCKETS, DEFAULT_RISK, OTHER_TERM, computeMetrics, termGroup } from "@/lib/calc";
-import { diffDays } from "@/lib/dates";
+import { DEFAULT_BUCKETS, DEFAULT_RISK, OTHER_TERM, computeMetrics, termGroup } from "@/lib/core";
+import { diffDays } from "@/lib/core";
 import { makeSampleDataset } from "@/lib/demo";
 import { fmtCompact, fmtMoney, fmtPct } from "@/lib/format";
-import type { Dataset } from "@/lib/types";
+import type { Dataset } from "@/lib/core";
 import { BarChartH, BarChartV, ChartCard, StackedMix } from "./Charts";
 import CustomerTable from "./CustomerTable";
 import UploadDialog from "./UploadDialog";

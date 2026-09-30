@@ -1,13 +1,8 @@
 node_modules
 .next
 out
+.wrangler
 .env*.local
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
-
-python/.venv
-python/.browser-profile
-python/downloads
-__pycache__
-.wrangler

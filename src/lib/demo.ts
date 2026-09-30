@@ -1,5 +1,5 @@
-import { addDays, todayIso } from "./dates";
-import type { Dataset, OpenItem, Payment } from "./types";
+import { addDays, todayIso } from "@/lib/core";
+import type { Dataset, OpenItem, Payment } from "@/lib/core";
 
 function rng(seed: number) {
   return () => {

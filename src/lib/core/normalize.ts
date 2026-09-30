@@ -1,7 +1,7 @@
 import { addDays, parseDate } from "./dates";
 import { parseMoneyCents } from "./money";
 import type { FieldId } from "./mapping";
-import type { InspectedSheet } from "./workbook";
+import type { InspectedSheet } from "./inspect";
 import type { Dataset, OpenItem, Payment } from "./types";
 
 export type Severity = "INFO" | "WARNING" | "ERROR";
