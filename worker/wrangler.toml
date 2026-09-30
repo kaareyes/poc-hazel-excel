@@ -1,8 +1,0 @@
-name = "poc-hazel-excel-relay"
-main = "index.ts"
-compatibility_date = "2025-01-01"
-
-[vars]
-ONEDRIVE_URL = "https://1drv.ms/x/c/a4d9313be8d6b81a/IQDiwWxFT9eWRLKZAllU9cm-AXKorc9P20HWcL8Pq3SnfGg?download=1"
-# Set to your Cloudflare Pages URL after the first deploy (e.g. https://poc-hazel-excel.pages.dev)
-ALLOWED_ORIGIN = "*"
