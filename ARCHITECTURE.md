@@ -6,6 +6,23 @@ Status: proposal for review. Items marked **[DECISION]** need product-owner/tech
 
 ---
 
+## 0. Revision — hosting & runtime (decided; supersedes §1–3 and §6 where they conflict)
+
+| Concern | Decision |
+|---|---|
+| Frontend | Current **static Next.js export stays on Cloudflare** (already live). It becomes a pure client of the API. Can move behind CloudFront later without code changes. `output: "export"` is kept. |
+| Backend | **Node.js + TypeScript API (Fastify)** in `apps/api`, packaged as a container and run on **AWS ECS Fargate** behind an Application Load Balancer (HTTPS via ACM). Separate **worker** service (same image, different entrypoint) consumes **SQS** for import jobs. |
+| Database | **PostgreSQL 16 on Amazon RDS** (single-AZ for MVP, Multi-AZ for production), encrypted (KMS), private subnets, automated backups + PITR. RLS + `withTenant()` exactly as in §4. **Drizzle ORM** + SQL migrations. |
+| Files | **S3** private bucket (SSE-KMS, block public access, versioning), presigned PUT/GET ≤ 5 min. |
+| Jobs | **SQS** (+ DLQ) replaces pg-boss. |
+| Secrets | **AWS Secrets Manager / KMS** — the AI API key is stored encrypted and only the API/worker task role can read it. |
+| Region | **ap-southeast-2 (Sydney)** proposed (AUD/AU customers). To be confirmed (Q1). |
+| IaC / CI | **AWS CDK (TypeScript)**; GitHub Actions builds image → ECR → ECS deploy; migrations run as a pre-deploy task. |
+| Auth (MVP-1) | No login. API is called by the Cloudflare-hosted site over CORS (allow-list of the site origin); Admin endpoints require `ADMIN_PASSWORD`-derived session. Real auth in the later phase. |
+| Repo layout | Monorepo: `apps/web` (current Next app), `apps/api`, `packages/core` (the pure logic now in `src/lib`: dates, money, mapping, normalize, calc — shared by web and api), `infra/` (CDK). |
+
+Consequences: the Next.js Route-Handler/Server-Action/Proxy parts of §1–3 are not used; all server logic lives in the Fastify API. Everything else (schema, calc definitions, AI layer, security model) is unchanged.
+
 ## 1. Summary
 
 A multi-tenant, server-rendered SaaS. Files are uploaded to private object storage, inspected and normalised by deterministic code in a background worker, structure is interpreted by an AI provider behind an interface, a human confirms the mapping, and a **pure deterministic calculation engine** produces verified snapshots that power the dashboard and (later) the Copilot.

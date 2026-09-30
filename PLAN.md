@@ -126,6 +126,17 @@ Note: the multi-tenant foundation (organization_id + RLS) is still built in from
 
 ## 4. Phased implementation plan
 
+> **Revised order after the static preview (hosting: Node.js API on AWS, Postgres on RDS, frontend on Cloudflare — see ARCHITECTURE §0):**
+> 1. Backend foundation (monorepo, `packages/core`, Fastify API, RDS schema + RLS, default company, CDK skeleton) ·
+> 2. Upload + S3 storage + server-side inspection (adds `.xls`) ·
+> 3. Import profiles, validation, import with source-row lineage ·
+> 4. Saved data + history (snapshots, balance change, 8-week trend) — dashboard reads the API ·
+> 5. Admin page + AI settings (password-gated) ·
+> 6. AI mapping on ·
+> then: login/multi-company, customer detail + collections, insights/export, Copilot, hardening, automated sources.
+>
+> The original phase table below is kept for reference.
+
 Every phase ends with: tests green, docs updated, demo-able slice, reviewed before the next begins.
 
 **Phase 0 — Project audit** ✅ (this document §1).
